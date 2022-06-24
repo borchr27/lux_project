@@ -1,24 +1,28 @@
 import scrapy
+from db import db_methods as psql
 
 class SrealitySpider(scrapy.Spider):
     name = "sreality"
-    start_urls = ["https://www.sreality.cz/en/search/for-sale/apartments?page=1"]
+    # start_urls = ["https://www.sreality.cz/en/search/for-sale/apartments?page=1"]
+    # start_urls = ["https://www.whiskyshop.com/scotch-whisky/all"]
     # TODO use for loop to add additional pages to get 200 results
 
+    def start_requests(self):
+        yield scrapy.Request('https://www.whiskyshop.com/scotch-whisky/all', meta={'playwright': True})
+        #return super().start_requests()
+
     def parse(self, response, **kwargs):
-        links = response.xpath("//img/@src")
-        html = ""
-        for link in links:
-            url = link.get()
+        conn = psql.connect()
+        psql.create_flat_listed_table(conn)
+        
+        for products in response.css('div.product-item-info'):
+            title = products.css('a.product-item-link::text').get()
+            image = products.css('img.product-image-photo').attrib['src']
+            psql.post_flat_listed(conn, title, image)
 
-            if any(extension in url for extension in [".jpg", ".png"]): # return true if any links are jpgs or pngs
-                html += """<a href="{url}" target="_blank">
-                <img src = "{url}" height="33%" width="33%"/>
-                <a/>""".format(url=url)
-                # TODO add title here as well
-
-                with open("frontpage.html", "a") as page:
-                    page.write(html)
-                    page.close()
-
-        #return super().parse(response, **kwargs)
+            # yield {
+            #     'title': products.css('a.product-item-link::text').get(),
+            #     'image': products.css('img.product-image-photo').attrib['src']
+            # }
+        # return super().parse(response, **kwargs)
+        conn.close()
