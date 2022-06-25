@@ -8,15 +8,30 @@ services:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: maindb
-    command: -p 5432
+    networks:
+      - docker-db
+
   adminer:
     image: adminer
     restart: always
     depends_on:
       - database
     ports:
-      - 8000:8000
-  services:
+      - 8080:8080
+    networks:
+      - docker-db
+
+  lux_project:
     container_name: lux_container
     image: lux_project
+    depends_on:
+      - database
+      - adminer
     build: .
+    networks:
+      - docker-db
+
+networks:
+  docker-db:
+    external: false
+    name: docker-db

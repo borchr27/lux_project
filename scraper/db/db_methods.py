@@ -42,7 +42,7 @@ def create_flat_listed_table(conn):
     cur.execute("CREATE TABLE flat_listed ( \
         flat_listed_id serial PRIMARY KEY, \
         title VARCHAR ( 100 ) NOT NULL, \
-        image NVARCHAR ( MAX ) NOT NULL);" )
+        image VARCHAR ( MAX ) NOT NULL);" )
 
     cur.close()
 
