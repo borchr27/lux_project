@@ -17,9 +17,11 @@ class SrealitySpider(scrapy.Spider):
         conn = psql.connect()
         psql.create_flat_listed_table(conn)
         
-        for products in response.css('div.product-item-info'):
-            title = products.css('a.product-item-link::text').get()
-            image = products.css('img.product-image-photo').attrib['src']
+        for items in response.css('div.product-item-info'):
+            title = items.css('a.product-item-link::text').get()
+            image = items.css('img.product-image-photo').attrib['src']
+            #title = items.css('span.name::text').get()
+            #image = item.css('preact.data-div-div-a-img').attrib['src']
             psql.post_flat_listed(conn, title, image)
 
             # yield {
