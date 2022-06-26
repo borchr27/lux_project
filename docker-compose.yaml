@@ -1,6 +1,7 @@
 services:
-  database:
+  postgres:
     image: postgres
+    container_name: postgres
     ports:
       - 5432:5432
     restart: always
@@ -9,29 +10,28 @@ services:
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: maindb
     networks:
-      - docker-db
+      - docker
 
   adminer:
     image: adminer
     restart: always
     depends_on:
-      - database
+      - postgres
     ports:
       - 8080:8080
     networks:
-      - docker-db
+      - docker
 
   lux_project:
-    container_name: lux_container
+    container_name: lux_project
     image: lux_project
     depends_on:
-      - database
-      - adminer
+      - postgres
     build: .
     networks:
-      - docker-db
+      - docker
 
 networks:
-  docker-db:
+  docker:
     external: false
-    name: docker-db
+    name: docker

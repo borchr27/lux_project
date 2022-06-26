@@ -1,6 +1,5 @@
 # Dockerfile, Image, Container
 
-# TODO change this so it runs an instance where we can run a browser for scraping
 FROM python:3.9.7
 
 #ADD . / lux_project/
@@ -10,11 +9,10 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-# RUN yum -y install libappindicator-gtk3
-# RUN yum -y install liberation-fonts
-RUN playwright install
 
 WORKDIR /
+
+RUN python main.py
 
 CMD ["scrapy", "crawl", "sreality"]
 #CMD [ "python", "/lux_project/main.py"]
