@@ -22,14 +22,25 @@ services:
     networks:
       - docker
 
-  lux_project:
-    container_name: lux_project
-    image: lux_project
+  backend:
+    container_name: backend
+    image: backend
     depends_on:
       - postgres
-    build: .
+    build: ./scraper
     networks:
       - docker
+  
+  frontend:
+    container_name: frontend
+    image: frontend
+    depends_on:
+        - backend
+    build: ./frontend
+    networks:
+      - docker
+    ports:
+      - 8000:8000
 
 networks:
   docker:

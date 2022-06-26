@@ -1,11 +1,9 @@
 # Dockerfile, Image, Container
 
 FROM python:3.9.7
+ADD . / /
 
-#ADD . / lux_project/
-ADD . /scraper /
-
-COPY requirements.txt .
+#COPY requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt

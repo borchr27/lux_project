@@ -40,6 +40,7 @@ def get_flat_listed_items(conn):
             print(row)
     
     cur.close()
+    return rows
 
 def post_flat_listed(conn, title, image):
     # preprocessing
