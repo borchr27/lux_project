@@ -1,11 +1,9 @@
 import scrapy
 from db import db_methods as psql
 
-URL = "https://www.whiskyshop.com/scotch-whisky/all"
-
 class SrealitySpider(scrapy.Spider):
     name = "sreality"
-    start_urls = [URL]
+    start_urls = ["https://www.whiskyshop.com/scotch-whisky/all?p=1","https://www.whiskyshop.com/scotch-whisky/all?p=2"]
     # start_urls = ["https://www.sreality.cz/en/search/for-sale/apartments?page=1"]
     # TODO use for loop to add additional pages to get 200 results
 
