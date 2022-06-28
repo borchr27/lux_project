@@ -1,67 +1,56 @@
-import http
+import http.server
 import socketserver
-# from db import db_methods as psql
+import time
+from db import db_methods as psql
 
-# def build_html():
-#     conn = psql.connect()
+def build_html():
+    conn = psql.connect()
+    if conn:
+        print("Connected Successfully")
+    else:
+        print("Connection Not Established")
+    result = psql.get_flat_listed_items(conn)
+    conn.close()
 
-#     if conn:
-#         print ("Connected Successfully")
-#     else:
-#         print ("Connection Not Established")
+    p = '<tr><td>Id</td><td>Title</td><td>Image</td></tr>'
 
-#     result = psql.get_flat_listed_items(conn)
+    for row in result:
+        item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td><img src="{row[2]}" alt="" height=100 width=100 /></td>'
+        p = p + item
 
-#     conn.close()
+    contents = f'''<!DOCTYPE html>
+    <html>
+    <body>
+    <table>
+    {p}
+    </table>
+    </body>
+    </html>
+    '''
 
-#     p = []
-#     tbl = "<tr><td>ID</td><td>Title</td><td>Image</td></tr>"
-#     p.append(tbl)
+    filename = 'index.html'
+    return contents, filename
 
-#     for row in result:
-#         a = "<tr><td>%s</td>"%row[0]
-#         p.append(a)
-#         b = "<td>%s</td>"%row[1]
-#         p.append(b)
-#         c = "<td>%s</td>"%row[2]
-#         p.append(c)
+def main():
+    contents, filename = build_html()
+    output = open(filename,"w")
+    output.write(contents)
+    output.close()
 
-#     contents = '''<!DOCTYPE html>
-#     <html>
-#     <head>
-#     <title>Scraped Website Data</title>
-#     </head>
-#     <body>
-#     <table>
-#     %s
-#     </table>
-#     </body>
-#     </html>
-#     '''%(p)
-
-#     filename = 'index.html'
-#     return contents, filename
-
-# def main():
-#     contents, filename = build_html()
-#     output = open(filename,"w")
-#     output.write(contents)
-#     output.close()
-
-# main()  
-
-###############
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.path = 'index.html'
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
-# Create an object of the above class
-handler_object = MyHttpRequestHandler
+while(True):
+    time.sleep(10)
+    main()
+    # Create an object of the above class
+    handler_object = MyHttpRequestHandler
 
-PORT = 8000
-my_server = socketserver.TCPServer(("", PORT), handler_object)
+    PORT = 8080
+    my_server = socketserver.TCPServer(("", PORT), handler_object)
 
-# Star the server
-my_server.serve_forever()
+    # Star the server
+    my_server.serve_forever()

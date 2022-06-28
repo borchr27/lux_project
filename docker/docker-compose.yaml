@@ -17,8 +17,8 @@ services:
     restart: always
     depends_on:
       - postgres
-    ports:
-      - 8080:8080
+    # ports:
+    #   - 8080:8080
     networks:
       - docker
 
@@ -36,11 +36,12 @@ services:
     image: frontend
     depends_on:
         - backend
+        - postgres
     build: ./frontend
     networks:
       - docker
     ports:
-      - 8000:8000
+      - 8080:8080 # switch to 8000 then uncomment adminer ports to run both adminer and web page (for debugging mainly)
 
 networks:
   docker:
