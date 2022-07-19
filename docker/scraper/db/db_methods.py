@@ -5,7 +5,8 @@ import psycopg2
 # psql postgres
 
 def connect():
-    # connect to the db 
+    """! Connect to the postgres database.
+    """
     conn = psycopg2.connect(
         # server = postgres
         database="maindb",
@@ -16,17 +17,24 @@ def connect():
     return conn
 
 def create_flat_listed_table(conn):
-    # open cursor to perform db operations
+    """! Open cursor and create table to store data.
+
+    @param conn  Pass the connection to use to connect to the database
+    """
     cur = conn.cursor()
     # build the table
     try:
         cur.execute("CREATE TABLE flat_listed (id serial not null, title text not null, image text not null);")
     except:
-        print("ERROR: the table could not be created!")
+        print("WARNING: The table could not be created or the table has already been created.")
     
     cur.close()
 
 def get_flat_listed_items(conn):
+    """! Get request to retrieve all items from table
+
+    @param conn  Pass the connection to use to connect to the database
+    """
     # open cursor to perform db operations
     cur = conn.cursor()
 
@@ -40,6 +48,14 @@ def get_flat_listed_items(conn):
     return rows
 
 def post_flat_listed(conn, title, image):
+    """! Method to post a single item into the database
+
+    @param conn  Pass the connection to use to connect to the database
+    
+    @param title  The title of the item
+
+    @param image  The image of the itme 
+    """
     # preprocessing
     title = title.replace("\'"," ")
     image = image.replace("\'"," ") 
