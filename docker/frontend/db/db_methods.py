@@ -26,9 +26,25 @@ def create_flat_listed_table(conn):
     try:
         cur.execute("CREATE TABLE flat_listed (id serial not null, title text not null, image text not null);")
     except:
-        print("ERROR: the table could not be created!")
+        print("WARNING: The table could not be created or the table has already been created.")
     
     cur.close()
+
+def table_exists(conn, name):
+    """! Open cursor search for table with name parameter and return boolean value describing if table exists.
+
+    @param conn  Pass the connection to use to connect to the database
+
+    @param name  The name of the table to look for
+
+    @return   Returns a boolean value describing if the table exists or not
+    """
+    exists = False
+    cur = conn.cursor()
+    cur.execute(f"SELECT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = '{name}');")
+    exists = cur.fetchone()[0]
+    cur.close()
+    return bool(exists)
 
 def get_flat_listed_items(conn):
     """! Get request to retrieve all items from table
