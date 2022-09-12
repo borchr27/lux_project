@@ -24,7 +24,7 @@ def create_flat_listed_table(conn):
     cur = conn.cursor()
     # build the table
     try:
-        cur.execute("CREATE TABLE flat_listed (id serial not null, title text not null, image text not null);")
+        cur.execute("CREATE TABLE IF NOT EXISTS flat_listed (id serial not null, title text not null, image text not null);")
     except:
         print("WARNING: The table could not be created or the table has already been created.")
     
