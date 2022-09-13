@@ -3,14 +3,13 @@ services:
     image: postgres
     container_name: postgres
     ports:
-      - 5432:5432
-    restart: always
+      - "5432:5432"
+    restart: unless-stopped
+    hostname: postgres
     environment: 
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-    networks:
-      - docker
 
   # adminer:
   #   image: adminer
@@ -18,7 +17,7 @@ services:
   #   depends_on:
   #     - postgres
   #   # ports:
-  #   #   - 8080:8080
+  #   #   - "8080:8080"
   #   networks:
   #     - docker
 
@@ -28,12 +27,5 @@ services:
     depends_on:
       - postgres
     ports:
-      - 8080:8080
+      - "8080:8080"
     build: ./app
-    networks:
-      - docker
-
-networks:
-  docker:
-    external: false
-    name: docker

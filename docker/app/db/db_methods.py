@@ -27,13 +27,13 @@ def create_flat_listed_table(conn):
     cur = conn.cursor()
     # build the table
     try:
-        cur.execute("CREATE TABLE flat_listed (id serial not null, title text not null, image text not null);")
+        cur.execute("CREATE TABLE IF NOT EXISTS flat_listed (id serial not null, title text not null, image text not null);")
     except:
         print("WARNING: The table could not be created or the table has already been created.")
     
     cur.close()
 
-def table_exists(conn, name):
+def flat_listed_table_exists(conn, name):
     """! Open cursor search for table with name parameter and return boolean value describing if table exists.
 
     @param conn  Pass the connection to use to connect to the database
@@ -66,7 +66,7 @@ def get_flat_listed_items(conn):
     cur.close()
     return rows
 
-def post_flat_listed(conn, title, image):
+def post_flat_listed(conn, item):
     """! Method to post a single item into the database
 
     @param conn  Pass the connection to use to connect to the database
@@ -76,8 +76,8 @@ def post_flat_listed(conn, title, image):
     @param image  The image of the itme 
     """
     # preprocessing
-    title = title.replace("\'"," ")
-    image = image.replace("\'"," ") 
+    title = item['title'].replace("\'"," ")
+    image = item['image'].replace("\'"," ") 
     
     # open cursor to perform db operations
     cur = conn.cursor()
