@@ -5,13 +5,16 @@ import psycopg2
 # psql postgres
 
 def connect():
-    """! Connect to the postgres database.
+    """! Connect to the postgres database. To view the database or debug open up the shell for the 
+    database image then use the 'psql -U docker maindb' command to enter into the database bash. Then
+    use the '\l' command to list the databases. Then you can use the command 'SELECT * FROM flat_listed limit 10;'
+    to view the items in the db.
     """
     conn = psycopg2.connect(
         # server = postgres
-        database="maindb",
-        user="docker",
-        password="docker",
+        database="postgres",
+        user="postgres",
+        password="postgres",
         host="postgres"
     )
     return conn
