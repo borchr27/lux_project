@@ -27,7 +27,7 @@ services:
     image: backend
     depends_on:
       - postgres
-    build: ./scraper
+    build: ./backend
     networks:
       - docker
   
