@@ -8,9 +8,14 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-WORKDIR /app
+ENV PYTHONPATH "${PYTHONPATH}:/app/"
 
-CMD scrapy crawl sreality
+WORKDIR /app/scraper
+# RUN scrapy crawl sreality
+# CMD scrapy crawl sreality
+
+# WORKDIR /app/website
+CMD scrapy crawl sreality; cd ..; cd website; python main.py
 # CMD [ "python", "/lux_project/main.py"]
 
 # docker build --rm -t lux_project .       # build the lux_project image

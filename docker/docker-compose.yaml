@@ -12,36 +12,26 @@ services:
     networks:
       - docker
 
-  adminer:
-    image: adminer
-    restart: always
-    depends_on:
-      - postgres
-    # ports:
-    #   - 8080:8080
-    networks:
-      - docker
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   depends_on:
+  #     - postgres
+  #   # ports:
+  #   #   - 8080:8080
+  #   networks:
+  #     - docker
 
-  backend:
-    container_name: backend
-    image: backend
+  app:
+    container_name: app
+    image: app
     depends_on:
       - postgres
-    build: ./backend
-    networks:
-      - docker
-  
-  frontend:
-    container_name: frontend
-    image: frontend
-    depends_on:
-        - backend
-        - postgres
-    build: ./frontend
-    networks:
-      - docker
     ports:
-      - 8080:8080 # switch to 8000 then uncomment adminer ports to run both adminer and web page (for debugging mainly)
+      - 8080:8080
+    build: ./app
+    networks:
+      - docker
 
 networks:
   docker:
