@@ -16,10 +16,12 @@ def build_html():
     result = psql.get_flat_listed_items(conn)
     conn.close()
 
-    p = '<tr><td>Id</td><td>Title</td><td>Image</td></tr>'
+    p = '<tr><td>Id</td><td>Author</td><td>Quote</td></tr>'
 
     for row in result:
-        item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td><img src="{row[2]}" alt="" height=100 width=100 /></td>'
+        # for displaying an image
+        # item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td><img src="{row[2]}" alt="" height=100 width=100 /></td>'
+        item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td>'
         p = p + item
 
     contents = f'''<!DOCTYPE html>

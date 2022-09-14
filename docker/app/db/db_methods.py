@@ -76,14 +76,14 @@ def post_flat_listed(conn, item):
     @param image  The image of the itme 
     """
     # preprocessing
-    title = item['title'].replace("\'"," ")
-    image = item['image'].replace("\'"," ") 
+    author = item['author'].replace("\'"," ")
+    quote = item['quote'].replace("\'","").replace("\"","") 
     
     # open cursor to perform db operations
     cur = conn.cursor()
 
     try:
-        cur.execute(f"INSERT INTO flat_listed (title, image) VALUES  ('{title}', '{image}');")
+        cur.execute(f"INSERT INTO flat_listed (title, image) VALUES  ('{author}', '{quote}');")
     except:
         print("ERROR: file could not be inserted!")
     
