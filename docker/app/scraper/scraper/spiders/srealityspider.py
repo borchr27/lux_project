@@ -35,7 +35,7 @@ class SrealitySpider(scrapy.Spider):
         for x in data:
             item = ScraperItem()
             item['author'] = x['author']['name']
-            item['quote'] = x ['text']
+            item['quote'] = str(x['text']).replace('“',"").replace('”',"").replace("'","")
             # item['title'] = x['name']
             # item['image'] = x['_links']['images'][0]['href']
             yield item

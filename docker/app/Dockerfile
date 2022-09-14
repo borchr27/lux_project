@@ -3,10 +3,10 @@
 FROM python:3.9.7
 ADD . / app/
 
-COPY requirements.txt .
+ADD requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/"
 

@@ -25,6 +25,10 @@ def create_flat_listed_table(conn):
     @param conn  Pass the connection to use to connect to the database
     """
     cur = conn.cursor()
+
+    if flat_listed_table_exists(conn):
+        cur.execute("DELETE FROM flat_listed;")
+    
     # build the table
     try:
         cur.execute("CREATE TABLE IF NOT EXISTS flat_listed (id serial not null, title text not null, image text not null);")
@@ -33,7 +37,7 @@ def create_flat_listed_table(conn):
     
     cur.close()
 
-def flat_listed_table_exists(conn, name):
+def flat_listed_table_exists(conn):
     """! Open cursor search for table with name parameter and return boolean value describing if table exists.
 
     @param conn  Pass the connection to use to connect to the database
@@ -44,7 +48,7 @@ def flat_listed_table_exists(conn, name):
     """
     exists = False
     cur = conn.cursor()
-    cur.execute(f"SELECT EXISTS (SELECT FROM pg_tables WHERE schemaname = 'public' AND tablename = '{name}');")
+    cur.execute(f"SELECT EXISTS (SELECT FROM pg_tables WHERE tablename = 'flat_listed');")
     exists = cur.fetchone()[0]
     cur.close()
     return bool(exists)
@@ -76,8 +80,8 @@ def post_flat_listed(conn, item):
     @param image  The image of the itme 
     """
     # preprocessing
-    author = item['author'].replace("\'"," ")
-    quote = item['quote'].replace("\'","").replace("\"","") 
+    author = item['author']
+    quote = item['quote']
     
     # open cursor to perform db operations
     cur = conn.cursor()
@@ -86,5 +90,6 @@ def post_flat_listed(conn, item):
         cur.execute(f"INSERT INTO flat_listed (title, image) VALUES  ('{author}', '{quote}');")
     except:
         print("ERROR: file could not be inserted!")
+        # print(author, quote)
     
     cur.close()
