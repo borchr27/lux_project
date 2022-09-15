@@ -27,7 +27,7 @@ def create_flat_listed_table(conn):
     cur = conn.cursor()
 
     if flat_listed_table_exists(conn):
-        cur.execute("DELETE FROM flat_listed;")
+        cur.execute("DROP TABLE flat_listed;")
     
     # build the table
     try:
@@ -63,6 +63,11 @@ def get_flat_listed_items(conn):
 
     cur.execute("SELECT * FROM flat_listed")
     rows = cur.fetchall()
+
+    # Query the tabl and output to file in container for debugging
+    # sql = "COPY (SELECT * FROM flat_listed) TO STDOUT WITH CSV DELIMITER ','"
+    # with open("table.csv", "w") as file:
+    #     cur.copy_expert(sql, file)
 
     if not len(rows):
         print("the table is empty!")

@@ -1,5 +1,4 @@
 import json
-from math import ceil
 import scrapy
 from scraper.items import ScraperItem
 
@@ -10,12 +9,9 @@ class SrealitySpider(scrapy.Spider):
     @param scrapy.Spider  Base class for scrapy spiders. All spiders must inherit from this class.
     """
     ## The name of the spider/crawler
-    name = "sreality"
-    # allowed_domains = ['sreality.cz']
+    name = "quotes"
+    allowed_domains = ['quotes.toscrape.com']
     page = 1
-    # start_urls = ['https://www.sreality.cz/api/en/v2/estates?category_main_cb=2&category_type_cb=1&page=1&per_page=20']
-
-    # name = "quotes"
     start_urls = ['https://quotes.toscrape.com/api/quotes?page=1',]
 
     def parse(self, response, **kwargs):
@@ -35,7 +31,7 @@ class SrealitySpider(scrapy.Spider):
         for x in data:
             item = ScraperItem()
             item['author'] = x['author']['name']
-            item['quote'] = str(x['text']).replace('“',"").replace('”',"").replace("'","")
+            item['quote'] = x['text']
             # item['title'] = x['name']
             # item['image'] = x['_links']['images'][0]['href']
             yield item

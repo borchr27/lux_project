@@ -3,9 +3,8 @@
 FROM python:3.9.7
 ADD . / app/
 
+RUN pip install --upgrade pip
 ADD requirements.txt .
-
-RUN pip install --no-cache-dir --upgrade pip
 RUN pip install -r requirements.txt
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/"
@@ -15,7 +14,7 @@ WORKDIR /app/scraper
 # CMD scrapy crawl sreality
 
 # WORKDIR /app/website
-CMD scrapy crawl sreality; cd ..; cd website; python main.py
+CMD scrapy crawl quotes; cd ..; cd website; python main.py
 # CMD [ "python", "/lux_project/main.py"]
 
 # docker build --rm -t lux_project .       # build the lux_project image

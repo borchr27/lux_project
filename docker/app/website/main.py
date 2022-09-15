@@ -21,7 +21,7 @@ def build_html():
     for row in result:
         # for displaying an image
         # item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td><img src="{row[2]}" alt="" height=100 width=100 /></td>'
-        item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td>{row[2]}</td>'
+        item = f'<tr><td>{row[0]}   </td><td>{row[1]}       </td><td>{row[2]}</td>'
         p = p + item
 
     contents = f'''<!DOCTYPE html>
@@ -52,7 +52,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 while(True):
-    time.sleep(10)
+    # time.sleep(10)
     main()
     # Create an object of the above class
     handler_object = MyHttpRequestHandler
