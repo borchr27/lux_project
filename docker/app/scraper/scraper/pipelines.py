@@ -6,25 +6,37 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-from db import db_methods as psql
+from db.PostgresDatabase import PostgresDatabase
 import unidecode
 from scrapy.exceptions import DropItem
 
-class DatabasePipeline(object):
+class DatabasePipeline():
     def __init__(self):
         # Connect to the Postgres database and create the table if not yet created
-        self.conn = psql.connect()
-        psql.create_flat_listed_table(self.conn)
+        self.db = PostgresDatabase()
+
+    def open_spider(self, spider):
+        spider.logger.info(f'Opening DatabasePipeline')
+        # spider.logger.info(f'Opening PostgresPipeline on {os.environ["POSTGRES_HOST"]}:{os.environ["POSTGRES_PORT"]}...')
+        self.db.connect()
+        # self.db.execute('CREATE TABLE IF NOT EXISTS quotes (id serial not null, author text not null, quote text not null);')
+        spider.logger.info('Opened DatabasePipeline.')
 
     def process_item(self, item, spider):
-        psql.post_flat_listed(self.conn, item)
-        self.conn.commit()
+        spider.logger.info('Processing item...')
+        self.db.execute('INSERT INTO quotes (author, quote) VALUES (%s, %s)',
+                        (
+                            item['author'],
+                            item['quote'],
+                        ))
+        self.db.commit()
+        spider.logger.info('Processed item.')
         return item
     
     def close_spider(self, spider):
-        ## Close cursor & connection to database 
-        # self.cur.close()
-        self.conn.close()
+        spider.logger.info('Closing PostgresPipeline...')
+        self.db.close()
+        spider.logger.info('Closed PostgresPipeline.')
 
 
 class ProcessingPipeline:

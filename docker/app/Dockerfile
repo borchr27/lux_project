@@ -4,7 +4,7 @@ FROM python:3.9.7
 ADD . / app/
 
 RUN pip install --upgrade pip
-ADD requirements.txt .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/"

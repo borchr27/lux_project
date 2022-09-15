@@ -1,20 +1,17 @@
 import http.server
 import socketserver
 import time
-from db import db_methods as psql
+from db.PostgresDatabase import PostgresDatabase
 
 def build_html():
     """! Connect to the database, get all items, close connection, build the html.
     """
-    conn = psql.connect()
-    if conn:
-        # yield "Connected Successfully"
-        print("Connected Successfully")
-    else:
-        # yield "Connection Not Established"
-        print("Connection Not Established")
-    result = psql.get_flat_listed_items(conn)
-    conn.close()
+    # conn = psql.connect()
+    db = PostgresDatabase()
+    db.connect()
+    db.execute('SELECT * FROM quotes')
+    result = db.cursor.fetchall()
+    db.close()
 
     p = '<tr><td>Id</td><td>Author</td><td>Quote</td></tr>'
 
@@ -33,7 +30,6 @@ def build_html():
     </body>
     </html>
     '''
-
     filename = 'index.html'
     return contents, filename
 
