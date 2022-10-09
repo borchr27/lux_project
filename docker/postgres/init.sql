@@ -1,6 +1,4 @@
-\c docker;
-
-DROP TABLE quotes;
+\c postgres
 
 CREATE TABLE IF NOT EXISTS quotes (
     id serial not null, 

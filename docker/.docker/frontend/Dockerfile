@@ -1,21 +1,21 @@
 # Dockerfile, Image, Container
 
 FROM python:3.9.7
-ADD . / app/
+COPY frontend .
+COPY wait-for-it.sh /frontend
 
 RUN pip install --upgrade pip
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-ENV PYTHONPATH "${PYTHONPATH}:/app/"
+ENV PYTHONPATH "${PYTHONPATH}:/frontend/"
 
-WORKDIR /app/scraper
-# RUN scrapy crawl sreality
-# CMD scrapy crawl sreality
+WORKDIR /frontend
 
-# WORKDIR /app/website
-CMD scrapy crawl quotes; cd ..; cd website; python main.py
+# CMD python main.py
 # CMD [ "python", "/lux_project/main.py"]
+RUN chmod +x ./wait-for-it.sh
+CMD ["./wait-for-it.sh", "postgres:5432", "-t", "20", "--", "python", "main.py"]
 
 # docker build --rm -t lux_project .       # build the lux_project image
 # docker run -p 8080:8080 lux_project      # run the image

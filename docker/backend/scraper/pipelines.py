@@ -6,7 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-from db.PostgresDatabase import PostgresDatabase
+from PostgresDatabase import PostgresDatabase
 import unidecode
 from scrapy.exceptions import DropItem
 

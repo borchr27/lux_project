@@ -1,7 +1,7 @@
 import http.server
 import socketserver
 import time
-from db.PostgresDatabase import PostgresDatabase
+from PostgresDatabase import PostgresDatabase
 
 def build_html():
     """! Connect to the database, get all items, close connection, build the html.
