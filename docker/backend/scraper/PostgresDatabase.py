@@ -14,14 +14,17 @@ class PostgresDatabase:
         use the '\l' command to list the databases. Then you can use the command 'SELECT * FROM flat_listed limit 10;'
         to view the items in the db.
         """
-        conn = psycopg2.connect(
-            # server = postgres
-            database="postgres",
-            user="postgres",
-            password="postgres",
-            host="postgres"
-        )
-        self.connection = conn
+        try:
+            conn = psycopg2.connect(
+                # server = postgres
+                database="postgres",
+                user="postgres",
+                password="postgres",
+                host="postgres"
+            )
+            self.connection = conn
+        except:
+            pass
 
     def close(self) -> None:
         if self.cursor:
@@ -30,16 +33,19 @@ class PostgresDatabase:
             self.connection.close()
 
     def commit(self) -> None:
-        assert self.connection, 'Database connection is not established'
-        self.connection.commit()
+        # assert self.connection, 'Database connection is not established'
+        if self.connection:
+            self.connection.commit()
 
     def execute(self, command, values=None) -> None:
-        assert self.connection, 'Database connection is not established'
-        self.cursor = self.connection.cursor()
-        self.cursor.execute(command, values)
+        # assert self.connection, 'Database connection is not established'
+        if self.connection:
+            self.cursor = self.connection.cursor()
+            self.cursor.execute(command, values)
 
     def number_of_quotes(self) -> int:
-        assert self.connection, 'Database connection is not established'
-        self.cursor = self.connection.cursor()
-        self.cursor.execute('SELECT * FROM quotes')
+        # assert self.connection, 'Database connection is not established'
+        if self.connection:
+            self.cursor = self.connection.cursor()
+            self.cursor.execute('SELECT * FROM quotes')
         return self.cursor.rowcount

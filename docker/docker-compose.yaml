@@ -1,6 +1,8 @@
 services:
   postgres:
-    build: .docker/postgres
+    build: 
+      context: .
+      dockerfile: .docker/postgres/Dockerfile
     volumes:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment: 
@@ -8,11 +10,15 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
   backend:
-    build: .docker/backend
+    build: 
+      context: .
+      dockerfile: .docker/backend/Dockerfile
     depends_on:
       - postgres
   frontend:
-    build: .docker/frontend
+    build: 
+      context: .
+      dockerfile: .docker/frontend/Dockerfile
     depends_on:
       - backend
     ports:

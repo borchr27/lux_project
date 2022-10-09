@@ -7,19 +7,19 @@ def build_html():
     """! Connect to the database, get all items, close connection, build the html.
     """
     # conn = psql.connect()
+    p = '<tr><td>Id</td><td>Author</td><td>Quote</td></tr>'
     db = PostgresDatabase()
     db.connect()
-    db.execute('SELECT * FROM quotes')
-    result = db.cursor.fetchall()
-    db.close()
+    if db.connection:
+        db.execute('SELECT * FROM quotes')
+        result = db.cursor.fetchall()
+        db.close()
 
-    p = '<tr><td>Id</td><td>Author</td><td>Quote</td></tr>'
-
-    for row in result:
-        # for displaying an image
-        # item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td><img src="{row[2]}" alt="" height=100 width=100 /></td>'
-        item = f'<tr><td>{row[0]}   </td><td>{row[1]}       </td><td>{row[2]}</td>'
-        p = p + item
+        for row in result:
+            # for displaying an image
+            # item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td><img src="{row[2]}" alt="" height=100 width=100 /></td>'
+            item = f'<tr><td>{row[0]}   </td><td>{row[1]}       </td><td>{row[2]}</td>'
+            p = p + item
 
     contents = f'''<!DOCTYPE html>
     <html>
