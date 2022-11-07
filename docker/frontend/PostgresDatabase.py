@@ -3,6 +3,13 @@ import psycopg2
 # pg_ctl -D /usr/local/var/postgres start
 # pg_ctl -D /usr/local/var/postgres stop
 # psql postgres
+
+# DOCKER HELP BELOW
+# psql -U postgres                  :: in terminal in docker container
+# \dt                               :: to see tables
+# SELECT COUNT(*) FROM table_name;  :: to see number of rows in table
+# TRUNCATE table_name               :: to delete all rows in table
+
 class PostgresDatabase:
     def __init__(self) -> None:
         self.connection = None
