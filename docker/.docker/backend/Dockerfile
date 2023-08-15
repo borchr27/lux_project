@@ -6,7 +6,7 @@ COPY ./wait-for-it.sh /backend/scraper
 
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 ENV PYTHONPATH "${PYTHONPATH}:/backend/"
 
@@ -16,4 +16,9 @@ WORKDIR /backend/scraper
 # CMD scrapy crawl quotes;
 
 RUN chmod +x ./wait-for-it.sh
-CMD ["./wait-for-it.sh", "postgres:5432", "-t", "20", "--", "scrapy", "crawl", "quotes"]
+
+# use this to run the backend with the scraper
+CMD ["./wait-for-it.sh", "postgres:5432", "-t", "20", "--", "scrapy", "crawl", "site"]
+   
+#use this to run the backend without the scraper
+# CMD ["./wait-for-it.sh", "postgres:5432", "-t", "20"]

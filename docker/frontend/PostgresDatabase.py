@@ -40,19 +40,16 @@ class PostgresDatabase:
             self.connection.close()
 
     def commit(self) -> None:
-        # assert self.connection, 'Database connection is not established'
         if self.connection:
             self.connection.commit()
 
     def execute(self, command, values=None) -> None:
-        # assert self.connection, 'Database connection is not established'
         if self.connection:
             self.cursor = self.connection.cursor()
             self.cursor.execute(command, values)
 
     def number_of_quotes(self) -> int:
-        # assert self.connection, 'Database connection is not established'
         if self.connection:
             self.cursor = self.connection.cursor()
-            self.cursor.execute('SELECT * FROM quotes')
+            self.cursor.execute('SELECT * FROM sites')
         return self.cursor.rowcount

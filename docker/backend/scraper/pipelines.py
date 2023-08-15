@@ -7,8 +7,9 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 from PostgresDatabase import PostgresDatabase
-import unidecode
 from scrapy.exceptions import DropItem
+from bs4 import BeautifulSoup
+import re
 
 class DatabasePipeline():
     def __init__(self):
@@ -24,14 +25,26 @@ class DatabasePipeline():
 
     def process_item(self, item, spider):
         spider.logger.info('Processing item...')
-        self.db.execute('INSERT INTO quotes (author, quote) VALUES (%s, %s)',
-                        (
-                            item['author'],
-                            item['quote'],
-                        ))
-        self.db.commit()
+        
+        # Check if the title already exists in the database
+        self.db.execute('SELECT COUNT(*) FROM sites WHERE title = %s', (item['title'],))
+        result = self.db.cursor.fetchone()
+        count = result[0]
+        
+        if count == 0:  # Title doesn't exist, insert it
+            self.db.execute('INSERT INTO sites (title, info) VALUES (%s, %s)',
+                            (
+                                item['title'],
+                                item['info'],
+                            ))
+            self.db.commit()
+            spider.logger.info('Title added to the database.')
+        else:
+            spider.logger.info('Title already exists in the database.')
+
         spider.logger.info('Processed item.')
         return item
+
     
     def close_spider(self, spider):
         spider.logger.info('Closing PostgresPipeline...')
@@ -40,17 +53,23 @@ class DatabasePipeline():
 
 
 class ProcessingPipeline:
-    
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
 
-        if adapter.get('author'):
-            author = adapter['author']
-            adapter['author'] = unidecode.unidecode(author)
-            
-            if adapter.get('quote'):
-                quote = str(adapter['quote']).replace('“',"").replace('”',"").replace("'","")
-                adapter['quote'] = quote
-                return item
+        if adapter.get('info'):
+            html = adapter['info']
+            soup = BeautifulSoup(html , 'html.parser')
+            text = soup.get_text()  # get text from html
+            text = " ".join(text.split()) # remove extra spaces
+            spider.logger.info(f'Processing item: {text}')
+            adapter['info'] = text
+
+            if adapter.get('title'):
+                url_string = str(adapter['title'])  # previously called name
+                pattern = r"https?://(www\.)?([^/?]+)"
+                match = re.match(pattern, url_string)
+                website_name = match.group(2)
+                adapter['title'] = website_name
+                return item            
         else:
-            raise DropItem(f"Missing author or quote in {item}")
+            raise DropItem(f"Missing website data at: {item}")

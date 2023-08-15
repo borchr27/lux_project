@@ -6,7 +6,7 @@ COPY ./wait-for-it.sh /frontend
 
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 ENV PYTHONPATH "${PYTHONPATH}:/frontend/"
 

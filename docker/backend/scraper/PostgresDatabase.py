@@ -18,7 +18,7 @@ class PostgresDatabase:
     def connect(self):
         """! Connect to the postgres database. To view the database or debug open up the shell for the 
         database image then use the 'psql -U docker maindb' command to enter into the database bash. Then
-        use the '\l' command to list the databases. Then you can use the command 'SELECT * FROM flat_listed limit 10;'
+        use the '\l' command to list the databases. Then you can use the command 'SELECT * FROM sites limit 10;'
         to view the items in the db.
         """
         try:
@@ -40,19 +40,16 @@ class PostgresDatabase:
             self.connection.close()
 
     def commit(self) -> None:
-        # assert self.connection, 'Database connection is not established'
         if self.connection:
             self.connection.commit()
 
     def execute(self, command, values=None) -> None:
-        # assert self.connection, 'Database connection is not established'
         if self.connection:
             self.cursor = self.connection.cursor()
             self.cursor.execute(command, values)
 
     def number_of_quotes(self) -> int:
-        # assert self.connection, 'Database connection is not established'
         if self.connection:
             self.cursor = self.connection.cursor()
-            self.cursor.execute('SELECT * FROM quotes')
+            self.cursor.execute('SELECT * FROM sites')
         return self.cursor.rowcount

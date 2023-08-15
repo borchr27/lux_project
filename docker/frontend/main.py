@@ -1,28 +1,31 @@
 import http.server
 import socketserver
-import time
 from PostgresDatabase import PostgresDatabase
 
 def build_html():
     """! Connect to the database, get all items, close connection, build the html.
     """
     # conn = psql.connect()
-    p = '<tr><td>Id</td><td>Author</td><td>Quote</td></tr>'
+    p = '<tr><td>Id </td><td>Title </td><td>Info </td><td>Date </td></tr>'
     db = PostgresDatabase()
     db.connect()
     if db.connection:
-        db.execute('SELECT * FROM quotes')
+        db.execute('SELECT * FROM sites')
         result = db.cursor.fetchall()
         db.close()
 
         for row in result:
             # for displaying an image
             # item = f'<tr><td>{row[0]}</td><td>{row[1]}</td><td><img src="{row[2]}" alt="" height=100 width=100 /></td>'
-            item = f'<tr><td>{row[0]}   </td><td>{row[1]}       </td><td>{row[2]}</td>'
+            item = f'<tr><td>{row[0]}   </td><td>{row[1]}       </td><td>{row[2][:50]}       </td><td>{row[3]}</td>'
             p = p + item
 
     contents = f'''<!DOCTYPE html>
     <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Thesis</title>
+    </head>
     <body>
     <table>
     {p}
@@ -48,7 +51,6 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 while(True):
-    # time.sleep(10)
     main()
     # Create an object of the above class
     handler_object = MyHttpRequestHandler
