@@ -12,4 +12,4 @@ This is a python web scraper proof of concept in docker using Postgres to store 
 6. Refresh the `docker_frontend` image in the docker dashboard. 
 7. Navigate to `localhost:8080` in your browser.
 
-You should now see the scraped items displayed on the page.
+You should now see the scraped text from the websites listed in the '/docker/backend/sites.csv' displayed on the page.
